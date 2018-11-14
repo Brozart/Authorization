@@ -3,9 +3,12 @@ server:
   servlet.context-path: '/authorization'
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/authorization?createDatabaseIfNotExist=true&useSSL=false
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/authorization?useSSL=false
     username: pokemon
     password: pokemon
+    hikari:
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
   jpa:
     hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
