@@ -1,6 +1,5 @@
-package brozart.authorization.clientDetails;
+package brozart.authorization.client;
 
-import brozart.authorization.client.Client;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 
