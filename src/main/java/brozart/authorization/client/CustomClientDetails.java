@@ -10,7 +10,12 @@ public class CustomClientDetails implements ClientDetails {
     private final Client client;
     private final Set<String> scope;
 
-    public CustomClientDetails(final Client client) {
+    /**
+     * Creates a new {@link CustomClientDetails}
+     *
+     * @param client the client
+     */
+    CustomClientDetails(final Client client) {
         this.client = client;
         final String scope = client.getScope();
         if (scope != null) {
@@ -29,7 +34,7 @@ public class CustomClientDetails implements ClientDetails {
 
     @Override
     public Set<String> getResourceIds() {
-        return Collections.emptySet();
+        return Collections.singleton("resource_id");
     }
 
     @Override
@@ -54,7 +59,7 @@ public class CustomClientDetails implements ClientDetails {
 
     @Override
     public Set<String> getAuthorizedGrantTypes() {
-        return Collections.singleton("client_credentials");
+        return new LinkedHashSet<>(Arrays.asList("client_credentials", "password"));
     }
 
     @Override
