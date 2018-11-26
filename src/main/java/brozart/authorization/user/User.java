@@ -1,11 +1,18 @@
 package brozart.authorization.user;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -16,43 +23,4 @@ public class User {
     private String email;
     private Boolean enabled;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(final String id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(final String username) {
-        this.username = username;
-    }
-
-    String getPassword() {
-        return password;
-    }
-
-    void setPassword(final String password) {
-        this.password = password;
-    }
-
-    String getEmail() {
-        return email;
-    }
-
-    public void setEmail(final String email) {
-        this.email = email;
-    }
-
-    Boolean getEnabled() {
-        return enabled;
-    }
-
-    void setEnabled(final Boolean enabled) {
-        this.enabled = enabled;
-    }
 }
