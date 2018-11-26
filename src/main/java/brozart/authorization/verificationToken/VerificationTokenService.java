@@ -32,4 +32,13 @@ public class VerificationTokenService {
         verificationToken.setExpiryDate(cal.getTime());
         return verificationTokenRepository.save(verificationToken);
     }
+
+    public VerificationToken findByToken(final String token) {
+        return verificationTokenRepository.findByToken(token);
+    }
+
+    @Transactional
+    public void delete(final VerificationToken verificationToken) {
+        verificationTokenRepository.delete(verificationToken);
+    }
 }

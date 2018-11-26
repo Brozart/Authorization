@@ -1,6 +1,6 @@
 package brozart.authorization.user;
 
-import brozart.authorization.exception.EmailExistsException;
+import brozart.authorization.exception.EmailAlreadyInUseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +33,20 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User registerNewUserAccount(final User newUser) throws EmailExistsException {
+    public User registerNewUserAccount(final User newUser) throws EmailAlreadyInUseException {
+        LOG.debug("Registering new user..");
         final User existing = userRepository.findByEmail(newUser.getEmail());
         if (existing != null) {
-            throw new EmailExistsException();
+            LOG.debug("User with email " + newUser.getEmail() + " already registered..");
+            throw new EmailAlreadyInUseException();
         }
         newUser.setEnabled(false);
         newUser.setPassword(new BCryptPasswordEncoder(10).encode(newUser.getPassword()));
         return userRepository.save(newUser);
+    }
+
+    @Transactional
+    public void save(final User user) {
+        userRepository.save(user);
     }
 }

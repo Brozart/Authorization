@@ -10,14 +10,26 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @SuppressWarnings("unused")
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({EmailExistsException.class})
-    protected ResponseEntity<Object> handleEmailExists(final EmailExistsException ex) {
+    @ExceptionHandler({EmailAlreadyInUseException.class})
+    protected ResponseEntity<Object> handleEmailExists(final EmailAlreadyInUseException ex) {
         final ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage());
-        return toResponseEntity(apiError, HttpStatus.BAD_REQUEST);
+        return toResponseEntity(apiError);
     }
 
-    private ResponseEntity<Object> toResponseEntity(final ApiError apiError, final HttpStatus status) {
-        return new ResponseEntity<>(apiError, status);
+    @ExceptionHandler({InvalidVerificationTokenException.class})
+    protected ResponseEntity<Object> handleInvalidVerificationToken(final InvalidVerificationTokenException ex) {
+        final ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return toResponseEntity(apiError);
+    }
+
+    @ExceptionHandler({ExpiredVerificationTokenException.class})
+    protected ResponseEntity<Object> handleExpiredVerificationToken(final ExpiredVerificationTokenException ex) {
+        final ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return toResponseEntity(apiError);
+    }
+
+    private ResponseEntity<Object> toResponseEntity(final ApiError apiError) {
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
     private static class ApiError {

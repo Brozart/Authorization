@@ -1,6 +1,8 @@
 package brozart.authorization.user;
 
-import brozart.authorization.exception.EmailExistsException;
+import brozart.authorization.exception.EmailAlreadyInUseException;
+import brozart.authorization.exception.ExpiredVerificationTokenException;
+import brozart.authorization.exception.InvalidVerificationTokenException;
 import brozart.authorization.verificationToken.VerificationToken;
 import brozart.authorization.verificationToken.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Calendar;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/user")
@@ -33,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(final User user) throws EmailExistsException {
+    public ResponseEntity<?> register(final User user) throws EmailAlreadyInUseException {
         final User registered = userService.registerNewUserAccount(user);
         final VerificationToken verificationToken = verificationTokenService.create(registered);
         final String recipientAddress = user.getEmail();
@@ -49,5 +54,28 @@ public class UserController {
         email.setFrom("info.brozartapps@gmail.com");
         mailSender.send(email);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PostMapping("/register/confirm")
+    public ResponseEntity<?> confirmRegistration(final String token) throws Exception {
+        // Check if verification token exists
+        final VerificationToken verificationToken = verificationTokenService.findByToken(token);
+        if (verificationToken == null) {
+            throw new InvalidVerificationTokenException();
+        }
+
+        // Check if verification token is not expired
+        final User user = verificationToken.getUser();
+        final Calendar cal = Calendar.getInstance();
+        final Date now = cal.getTime();
+        if (now.compareTo(verificationToken.getExpiryDate()) >= 0) {
+            verificationTokenService.delete(verificationToken);
+            throw new ExpiredVerificationTokenException();
+        }
+
+        // Enable and save user
+        user.setEnabled(true);
+        userService.save(user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
