@@ -5,6 +5,7 @@ import org.springframework.security.oauth2.provider.ClientDetails;
 
 import java.util.*;
 
+@SuppressWarnings("WeakerAccess")
 public class CustomClientDetails implements ClientDetails {
 
     private final Client client;

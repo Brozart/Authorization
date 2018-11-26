@@ -1,12 +1,13 @@
 package brozart.authorization.user;
 
+import brozart.authorization.dto.UserDTO;
 import brozart.authorization.exception.EmailAlreadyInUseException;
 import brozart.authorization.exception.ExpiredVerificationTokenException;
 import brozart.authorization.exception.InvalidVerificationTokenException;
+import brozart.authorization.utils.Mapper;
 import brozart.authorization.verificationToken.VerificationToken;
 import brozart.authorization.verificationToken.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -26,9 +27,6 @@ public class UserController {
     private final VerificationTokenService verificationTokenService;
     private final JavaMailSender mailSender;
 
-    @Value("${my.url}")
-    private String url;
-
     @Autowired
     public UserController(final UserService userService, final VerificationTokenService verificationTokenService,
                           final JavaMailSender mailSender) {
@@ -38,14 +36,13 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(final User user) throws EmailAlreadyInUseException {
-        final User registered = userService.registerNewUserAccount(user);
+    public ResponseEntity<?> register(final UserDTO userDTO) throws EmailAlreadyInUseException {
+        final User registered = userService.registerNewUserAccount(Mapper.map(userDTO));
         final VerificationToken verificationToken = verificationTokenService.create(registered);
-        final String recipientAddress = user.getEmail();
+        final String recipientAddress = userDTO.getEmail();
         final String subject = "Registration Confirmation";
 
-        final String confirmationUrl = url + "/registrationConfirm?token=" +
-                verificationToken.getToken();
+        final String confirmationUrl = userDTO.getVerificationBaseUrl() + "?token=" + verificationToken.getToken();
         final String message = "Registration successful: confirm here: ";
         final SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
@@ -53,7 +50,7 @@ public class UserController {
         email.setText(message + " \r\n" + confirmationUrl);
         email.setFrom("info.brozartapps@gmail.com");
         mailSender.send(email);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/register/confirm")

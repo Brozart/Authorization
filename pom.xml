@@ -19,6 +19,7 @@
         <javax.version>2.2.11</javax.version>
         <javax-activation.version>1.1.1</javax-activation.version>
         <lombok.version>1.18.4</lombok.version>
+        <modelmapper.version>2.3.0</modelmapper.version>
     </properties>
 
     <parent>
@@ -64,6 +65,11 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${modelmapper.version}</version>
         </dependency>
 
         <!-- Javax.xml dependencies (removed from JDK 11)-->

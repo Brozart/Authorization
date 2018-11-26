@@ -27,5 +27,3 @@ spring:
     password: pokemon
 server:
   port: 8081
-my:
-  url: http://localhost:8081/authorization

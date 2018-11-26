@@ -89,7 +89,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
         return converter;
     }
 
-    protected static class CustomTokenEnhancer extends JwtAccessTokenConverter {
+    static class CustomTokenEnhancer extends JwtAccessTokenConverter {
         @Override
         public OAuth2AccessToken enhance(final OAuth2AccessToken accessToken, final OAuth2Authentication authentication) {
             final User user = (User) authentication.getPrincipal();

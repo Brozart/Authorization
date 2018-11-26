@@ -1,6 +1,0 @@
-CREATE TABLE ClientDetails (
-  id          INTEGER IDENTITY PRIMARY KEY,
-  clientId       VARCHAR(255) UNIQUE NOT NULL,
-  clientSecret    VARCHAR(255)  UNIQUE NOT NULL,
-  scope    VARCHAR(255) NOT NULL
-);
