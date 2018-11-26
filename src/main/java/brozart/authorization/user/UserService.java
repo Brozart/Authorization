@@ -1,12 +1,15 @@
 package brozart.authorization.user;
 
+import brozart.authorization.exception.EmailExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -27,5 +30,16 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("Could not find the user " + userName);
         }
         return new CustomUserDetails(user);
+    }
+
+    @Transactional
+    public User registerNewUserAccount(final User newUser) throws EmailExistsException {
+        final User existing = userRepository.findByEmail(newUser.getEmail());
+        if (existing != null) {
+            throw new EmailExistsException();
+        }
+        newUser.setEnabled(false);
+        newUser.setPassword(new BCryptPasswordEncoder(10).encode(newUser.getPassword()));
+        return userRepository.save(newUser);
     }
 }

@@ -13,6 +13,7 @@ public class User {
     private String id;
     private String username;
     private String password;
+    private String email;
     private Boolean enabled;
 
     public String getId() {
@@ -35,15 +36,23 @@ public class User {
         return password;
     }
 
-    public void setPassword(final String password) {
+    void setPassword(final String password) {
         this.password = password;
+    }
+
+    String getEmail() {
+        return email;
+    }
+
+    public void setEmail(final String email) {
+        this.email = email;
     }
 
     Boolean getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(final Boolean enabled) {
+    void setEnabled(final Boolean enabled) {
         this.enabled = enabled;
     }
 }

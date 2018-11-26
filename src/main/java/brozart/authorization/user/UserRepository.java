@@ -11,4 +11,12 @@ public interface UserRepository extends CrudRepository<User, Long> {
      * @return the found user
      */
     User findByUsername(String userName);
+
+    /**
+     * Finds the user by given email.
+     *
+     * @param email the email
+     * @return the found user
+     */
+    User findByEmail(String email);
 }
