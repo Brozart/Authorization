@@ -32,11 +32,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/user/register*", "/user/confirm*",
-                        "/user/newVerification*").permitAll()
+                .antMatchers("/user/registration*", "/user/registration/**",
+                        "/user/passwordReset*", "/user/passwordReset/**")
+                .permitAll()
+
                 .and()
+
                 .authorizeRequests()
-                .antMatchers("/**").authenticated();
+                .antMatchers("/secured/**").authenticated();
     }
 
     @Override

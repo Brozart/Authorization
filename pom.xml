@@ -90,8 +90,8 @@
         </dependency>
         <dependency>
             <groupId>javax.activation</groupId>
-            <artifactId>activation</artifactId>
-            <version>${javax-activation.version}</version>
+            <artifactId>javax.activation-api</artifactId>
+            <version>1.2.0</version>
         </dependency>
     </dependencies>
 

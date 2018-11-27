@@ -12,20 +12,22 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({EmailAlreadyInUseException.class})
     protected ResponseEntity<Object> handleEmailExists(final EmailAlreadyInUseException ex) {
-        final ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage());
-        return toResponseEntity(apiError);
+        return toResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()));
     }
 
-    @ExceptionHandler({InvalidVerificationTokenException.class})
-    protected ResponseEntity<Object> handleInvalidVerificationToken(final InvalidVerificationTokenException ex) {
-        final ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage());
-        return toResponseEntity(apiError);
+    @ExceptionHandler({InvalidRegistrationToken.class})
+    protected ResponseEntity<Object> handleInvalidRegistrationToken(final InvalidRegistrationToken ex) {
+        return toResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()));
     }
 
-    @ExceptionHandler({ExpiredVerificationTokenException.class})
-    protected ResponseEntity<Object> handleExpiredVerificationToken(final ExpiredVerificationTokenException ex) {
-        final ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage());
-        return toResponseEntity(apiError);
+    @ExceptionHandler({ExpiredRegistrationToken.class})
+    protected ResponseEntity<Object> handleExpiredVerificationToken(final ExpiredRegistrationToken ex) {
+        return toResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()));
+    }
+
+    @ExceptionHandler({EmailNotFoundException.class})
+    protected ResponseEntity<Object> handleEmailNotFound(final EmailNotFoundException ex) {
+        return toResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()));
     }
 
     private ResponseEntity<Object> toResponseEntity(final ApiError apiError) {

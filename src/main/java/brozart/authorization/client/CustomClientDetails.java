@@ -70,7 +70,7 @@ public class CustomClientDetails implements ClientDetails {
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
-        return Collections.emptySet();
+        return Collections.singletonList(() -> "USER_REGISTRATION");
     }
 
     @Override
