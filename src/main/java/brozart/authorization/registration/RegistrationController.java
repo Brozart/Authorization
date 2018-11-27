@@ -3,12 +3,13 @@ package brozart.authorization.registration;
 import brozart.authorization.dto.UserDTO;
 import brozart.authorization.dto.VerificationTokenRequest;
 import brozart.authorization.exception.EmailAlreadyInUseException;
-import brozart.authorization.exception.ExpiredRegistrationToken;
-import brozart.authorization.exception.InvalidRegistrationToken;
+import brozart.authorization.exception.ExpiredRegistrationTokenException;
+import brozart.authorization.exception.InvalidRegistrationTokenException;
 import brozart.authorization.mail.MailService;
 import brozart.authorization.user.User;
 import brozart.authorization.user.UserService;
 import brozart.authorization.utils.Mapper;
+import brozart.authorization.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,19 +61,19 @@ public class RegistrationController {
         // Check if verification token exists
         final RegistrationToken registrationToken = registrationTokenService.findByToken(token);
         if (registrationToken == null) {
-            throw new InvalidRegistrationToken();
+            throw new InvalidRegistrationTokenException();
         }
 
         // Check if verification token is not expired
-        final User user = registrationToken.getUser();
         final Calendar cal = Calendar.getInstance();
         final Date now = cal.getTime();
-        if (now.compareTo(registrationToken.getExpiryDate()) >= 0) {
+        if (TokenUtils.isTokenExpired(registrationToken.getExpiryDate())) {
             registrationTokenService.delete(registrationToken);
-            throw new ExpiredRegistrationToken();
+            throw new ExpiredRegistrationTokenException();
         }
 
         // Enable and save user
+        final User user = registrationToken.getUser();
         user.setEnabled(true);
         userService.save(user);
         return new ResponseEntity<>(HttpStatus.OK);

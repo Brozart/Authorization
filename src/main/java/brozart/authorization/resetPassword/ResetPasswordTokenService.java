@@ -1,5 +1,7 @@
 package brozart.authorization.resetPassword;
 
+import brozart.authorization.exception.ExpiredResetPasswordTokenException;
+import brozart.authorization.exception.InvalidResetPasswordTokenException;
 import brozart.authorization.user.User;
 import brozart.authorization.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +34,27 @@ public class ResetPasswordTokenService {
         }
     }
 
-    @Transactional
-    public ResetPasswordToken save(final ResetPasswordToken resetPasswordToken) {
-        return resetPasswordTokenRepository.save(resetPasswordToken);
-    }
-
     private ResetPasswordToken findByUser(final User user) {
         return resetPasswordTokenRepository.findByUser(user);
+    }
+
+    void validate(final String token) throws Exception {
+        final ResetPasswordToken resetPasswordToken = resetPasswordTokenRepository.findByToken(token);
+        if (resetPasswordToken == null) {
+            throw new InvalidResetPasswordTokenException();
+        }
+
+        if (TokenUtils.isTokenExpired(resetPasswordToken.getExpiryDate())) {
+            throw new ExpiredResetPasswordTokenException();
+        }
+    }
+
+    ResetPasswordToken findByToken(final String token) {
+        return resetPasswordTokenRepository.findByToken(token);
+    }
+
+    @Transactional
+    public void delete(final ResetPasswordToken token) {
+        resetPasswordTokenRepository.delete(token);
     }
 }

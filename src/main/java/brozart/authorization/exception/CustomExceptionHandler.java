@@ -10,18 +10,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @SuppressWarnings("unused")
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
+    /**
+     * Email exceptions
+     **/
     @ExceptionHandler({EmailAlreadyInUseException.class})
     protected ResponseEntity<Object> handleEmailExists(final EmailAlreadyInUseException ex) {
-        return toResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()));
-    }
-
-    @ExceptionHandler({InvalidRegistrationToken.class})
-    protected ResponseEntity<Object> handleInvalidRegistrationToken(final InvalidRegistrationToken ex) {
-        return toResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()));
-    }
-
-    @ExceptionHandler({ExpiredRegistrationToken.class})
-    protected ResponseEntity<Object> handleExpiredVerificationToken(final ExpiredRegistrationToken ex) {
         return toResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()));
     }
 
@@ -29,6 +22,36 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleEmailNotFound(final EmailNotFoundException ex) {
         return toResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()));
     }
+
+    /**
+     * Registration exceptions
+     **/
+    @ExceptionHandler({InvalidRegistrationTokenException.class})
+    protected ResponseEntity<Object> handleInvalidRegistrationToken(final InvalidRegistrationTokenException ex) {
+        return toResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()));
+    }
+
+    @ExceptionHandler({ExpiredRegistrationTokenException.class})
+    protected ResponseEntity<Object> handleExpiredVerificationToken(final ExpiredRegistrationTokenException ex) {
+        return toResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()));
+    }
+
+    /**
+     * Reset password exceptions
+     **/
+    @ExceptionHandler({InvalidResetPasswordTokenException.class})
+    protected ResponseEntity<Object> handleInvalidResetPasswordToken(final InvalidResetPasswordTokenException ex) {
+        return toResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()));
+    }
+
+    @ExceptionHandler({ExpiredResetPasswordTokenException.class})
+    protected ResponseEntity<Object> handleExpiredResetPasswordToken(final ExpiredResetPasswordTokenException ex) {
+        return toResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()));
+    }
+
+    /**
+     * General helper method
+     */
 
     private ResponseEntity<Object> toResponseEntity(final ApiError apiError) {
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);

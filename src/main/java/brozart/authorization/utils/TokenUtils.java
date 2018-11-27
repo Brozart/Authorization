@@ -13,18 +13,24 @@ public class TokenUtils {
 
     public static void updateToken(final RegistrationToken registrationToken, final String token) {
         registrationToken.setToken(token);
-        registrationToken.setExpiryDate(getExpiryDate());
+        registrationToken.setExpiryDate(calculateNewExpiryDate());
     }
 
     public static void updateToken(final ResetPasswordToken resetPasswordToken, final String token) {
         resetPasswordToken.setToken(token);
-        resetPasswordToken.setExpiryDate(getExpiryDate());
+        resetPasswordToken.setExpiryDate(calculateNewExpiryDate());
     }
 
-    private static Date getExpiryDate() {
+    private static Date calculateNewExpiryDate() {
         final Calendar cal = Calendar.getInstance();
         cal.setTime(new Timestamp(cal.getTime().getTime()));
         cal.add(Calendar.MINUTE, EXPIRATION);
         return cal.getTime();
+    }
+
+    public static boolean isTokenExpired(final Date expiryDate) {
+        final Calendar cal = Calendar.getInstance();
+        final Date now = cal.getTime();
+        return now.compareTo(expiryDate) >= 0;
     }
 }
