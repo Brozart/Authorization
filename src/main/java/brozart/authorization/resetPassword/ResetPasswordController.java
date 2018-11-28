@@ -54,7 +54,7 @@ public class ResetPasswordController {
     }
 
     @PostMapping("/confirm")
-    public ResponseEntity<?> resetPassword(final PasswordResetConfirmationRequest request) throws InvalidResetPasswordTokenException {
+    public ResponseEntity<?> resetPasswordConfirmation(final PasswordResetConfirmationRequest request) throws InvalidResetPasswordTokenException {
         final ResetPasswordToken token = resetPasswordTokenService.findByToken(request.getToken());
         if (token == null) {
             throw new InvalidResetPasswordTokenException();

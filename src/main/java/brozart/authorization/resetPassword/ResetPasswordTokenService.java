@@ -22,7 +22,7 @@ public class ResetPasswordTokenService {
 
     @Transactional
     public ResetPasswordToken createForUser(final User user) {
-        final ResetPasswordToken existing = findByUser(user);
+        final ResetPasswordToken existing = resetPasswordTokenRepository.findByUser(user);
         if (existing != null) {
             TokenUtils.updateToken(existing, UUID.randomUUID().toString());
             return resetPasswordTokenRepository.save(existing);
@@ -32,10 +32,6 @@ public class ResetPasswordTokenService {
             TokenUtils.updateToken(resetPasswordToken, UUID.randomUUID().toString());
             return resetPasswordTokenRepository.save(resetPasswordToken);
         }
-    }
-
-    private ResetPasswordToken findByUser(final User user) {
-        return resetPasswordTokenRepository.findByUser(user);
     }
 
     void validate(final String token) throws Exception {

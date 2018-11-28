@@ -2,14 +2,12 @@ package brozart.authorization.utils;
 
 import brozart.authorization.registration.RegistrationToken;
 import brozart.authorization.resetPassword.ResetPasswordToken;
+import org.apache.commons.lang3.time.DateUtils;
 
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 
 public class TokenUtils {
-
-    private static final int EXPIRATION = 60 * 24;
 
     public static void updateToken(final RegistrationToken registrationToken, final String token) {
         registrationToken.setToken(token);
@@ -22,10 +20,7 @@ public class TokenUtils {
     }
 
     private static Date calculateNewExpiryDate() {
-        final Calendar cal = Calendar.getInstance();
-        cal.setTime(new Timestamp(cal.getTime().getTime()));
-        cal.add(Calendar.MINUTE, EXPIRATION);
-        return cal.getTime();
+        return DateUtils.addDays(new Date(), 1);
     }
 
     public static boolean isTokenExpired(final Date expiryDate) {

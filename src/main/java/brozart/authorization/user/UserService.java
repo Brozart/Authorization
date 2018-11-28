@@ -46,8 +46,8 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void save(final User user) {
-        userRepository.save(user);
+    public User save(final User user) {
+        return userRepository.save(user);
     }
 
     public User findByEmail(final String email) {

@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class VerificationTokenRequest {
+public class RegisterTokenRequest {
 
     private String token;
-    private String verificationBaseUrl;
+    private String registrationBaseUrl;
 }

@@ -20,6 +20,7 @@
         <javax-activation.version>1.1.1</javax-activation.version>
         <lombok.version>1.18.4</lombok.version>
         <modelmapper.version>2.3.0</modelmapper.version>
+        <h2.version>1.4.197</h2.version>
     </properties>
 
     <parent>
@@ -71,6 +72,11 @@
             <artifactId>modelmapper</artifactId>
             <version>${modelmapper.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8.1</version>
+        </dependency>
 
         <!-- Javax.xml dependencies (removed from JDK 11)-->
         <dependency>
@@ -92,6 +98,19 @@
             <groupId>javax.activation</groupId>
             <artifactId>javax.activation-api</artifactId>
             <version>1.2.0</version>
+        </dependency>
+
+
+        <!-- Testing frameworks -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+            <version>${h2.version}</version>
         </dependency>
     </dependencies>
 

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**
@@ -32,7 +32,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({ExpiredRegistrationTokenException.class})
-    protected ResponseEntity<Object> handleExpiredVerificationToken(final ExpiredRegistrationTokenException ex) {
+    protected ResponseEntity<Object> handleExpiredRegistrationToken(final ExpiredRegistrationTokenException ex) {
         return toResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()));
     }
 
@@ -57,7 +57,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
-    private static class ApiError {
+    protected static class ApiError {
         private final String status;
         private final int statusCode;
         private final String message;
