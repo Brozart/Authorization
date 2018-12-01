@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
@@ -14,6 +15,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@ActiveProfiles("test")
 public class RegistrationTokenRepositoryTest {
 
     @Autowired
@@ -37,7 +39,7 @@ public class RegistrationTokenRepositoryTest {
 
         final RegistrationToken saved = testEntityManager.merge(registrationToken);
         testEntityManager.flush();
-        
+
         final RegistrationToken result = registrationTokenRepository.findByToken(token);
         assertEquals(saved.getId(), result.getId());
         assertEquals(token, result.getToken());
